@@ -1,0 +1,18 @@
+#!/bin/bash
+#Разблокировка файла для записи
+chattr -i /etc/resolv.conf
+touch /etc/resolv.conf.backups
+cat /etc/resolv.conf>>/etc/resolv.conf.backups
+echo '-------------------------------------'>>/etc/resolv.conf.backups
+
+if [ -z "$1" ] ;then
+echo nameserver 127.0.0.99>/etc/resolv.conf
+echo 'Ничего не введено, поэтому DNS отключен.'
+echo 'Для установки конкретного DNS введите changedns ip-адрес сервера.'
+else
+echo nameserver $1>/etc/resolv.conf
+echo Выбран DNS сервер $1
+fi
+echo 'Старые конфигурации DNS можно посмотреть, введя команду cat /etc/resolv.conf.backups'
+# Блокировка файла на запись
+chattr +i /etc/resolv.conf
